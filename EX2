@@ -1,0 +1,40 @@
+#include <stdio.h>
+
+int countInRange(int arr[], int left, int right, int num) {
+    int count = 0;
+    for (int i = left; i <= right; i++)
+        if (arr[i] == num)
+            count++;
+    return count;
+}
+
+int majorityElementRec(int arr[], int left, int right) {
+    if (left == right)
+        return arr[left];  // Base case
+
+    int mid = (left + right) / 2;
+
+    int leftMajor = majorityElementRec(arr, left, mid);
+    int rightMajor = majorityElementRec(arr, mid + 1, right);
+
+    if (leftMajor == rightMajor)
+        return leftMajor;
+
+    int leftCount = countInRange(arr, left, right, leftMajor);
+    int rightCount = countInRange(arr, left, right, rightMajor);
+
+    return (leftCount > rightCount) ? leftMajor : rightMajor;
+}
+
+int main() {
+    int n;
+    scanf("%d", &n);
+    int arr[n];
+    for (int i = 0; i < n; i++)
+        scanf("%d", &arr[i]);
+
+    int candidate = majorityElementRec(arr, 0, n - 1);
+    printf("%d\n", candidate);
+
+    return 0;
+}
